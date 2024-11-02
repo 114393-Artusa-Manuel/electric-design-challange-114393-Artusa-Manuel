@@ -1,4 +1,90 @@
-<!-- BUILT IT FROM:
-https://getbootstrap.com/docs/5.3/forms/form-control/#example
-https://getbootstrap.com/docs/5.3/forms/select/#default
-https://getbootstrap.com/docs/5.3/forms/select/#default -->
+<div class="container my-5">
+    <button class="btn btn-outline-primary" (click)="goLista()">Lista</button>
+    <form [formGroup]="budgetForm" (ngSubmit)="submitBudget()">
+    
+    <div class="mb-3">
+        <label for="date" class="form-label">Fecha de Cotización</label>
+        <input
+        id="date"
+        formControlName="date"
+        type="date"
+        class="form-control"
+        [ngClass]="{'is-invalid': budgetForm.get('date')?.invalid && budgetForm.get('date')?.touched}"
+        />
+        <div *ngIf="budgetForm.get('date')?.invalid && budgetForm.get('date')?.touched" class="invalid-feedback">
+        La fecha es requerida y no puede ser mayor a hoy.
+        </div>
+    </div>
+    
+    <div class="mb-3">
+        <label for="client" class="form-label">Cliente</label>
+        <input
+        id="client"
+        formControlName="client"
+        type="text"
+        class="form-control"
+        [ngClass]="{'is-invalid': budgetForm.get('client')?.invalid && budgetForm.get('client')?.touched}"
+        />
+        <div *ngIf="budgetForm.get('client')?.invalid && budgetForm.get('client')?.touched" class="invalid-feedback">
+        El nombre del cliente es requerido.
+        </div>
+    </div>
+    <!-- Módulos -->
+    <div formArrayName="modules">
+        <div *ngFor="let module of modules.controls; let i = index" [formGroupName]="i" class="border rounded p-3 mb-3">
+        <div class="row">
+            <!-- Tipo de Módulo -->
+            <div class="col-md-6 mb-3">
+            <label for="moduleType{{ i }}" class="form-label">Tipo de Módulo</label>
+            <select
+                id="moduleType{{ i }}"
+                formControlName="moduleType"
+                (change)="updateModuleInfo(i)"
+                class="form-select"
+                [ngClass]="{'is-invalid': module.get('moduleType')?.invalid && module.get('moduleType')?.touched}"
+            >
+                <option [ngValue]="null">Seleccione un módulo</option>
+                <option *ngFor="let type of modulesTypes" [ngValue]="type.id">{{ type.name }}</option>
+            </select>
+              <div *ngIf="module.get('moduleType')?.invalid && module.get('moduleType')?.touched" class="invalid-feedback">
+                El tipo de módulo es requerido.
+            </div>
+            </div>
+            <!-- Información del Módulo -->
+            <div class="col-md-6 mb-3">
+            <p class="mb-1">Precio: {{ getModulePrice(i) || 'N/A' }}</p>
+            <p>Slots: {{ getModuleSlots(i) || 'N/A' }}</p>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Ambiente -->
+            <div class="col-md-12 mb-3">
+            <label for="environment{{ i }}" class="form-label">Ambiente</label>
+            <select
+                id="environment{{ i }}"
+                formControlName="environment"
+                class="form-select"
+                [ngClass]="{'is-invalid': module.get('environment')?.invalid && module.get('environment')?.touched}"
+            >
+                <option [ngValue]="null">Seleccione un ambiente</option>
+                <option *ngFor="let zone of zones" [ngValue]="zone">{{ zone }}</option>
+            </select>
+              <div *ngIf="module.get('environment')?.invalid && module.get('environment')?.touched" class="invalid-feedback">
+                El ambiente es requerido.
+            </div>
+            </div>
+        </div>
+        </div>
+        <!-- Agregar Módulo -->
+        <button type="button" class="btn btn-outline-primary mt-2" (click)="addModule()">
+            Agregar Módulo
+        </button>
+    </div>
+    <!-- Botón de Envío -->
+    <div class="d-grid mt-4">
+        <button type="submit" class="btn btn-success" [disabled]="!budgetForm.valid">
+            Guardar Cotización
+        </button>
+    </div>
+    </form>
+</div>

@@ -1,1 +1,34 @@
-<!-- BUILD IT FROM HERE https://getbootstrap.com/docs/5.3/content/tables/#striped-rows -->
+<div class="container mt-5">
+  <button class="btn btn-outline-primary" (click)="goForm()">Formulario</button>
+    <h2 class="mb-4">Listado de Budgets</h2>
+    <table class="table table-bordered table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th>ID</th>
+          <th>Cliente</th>
+          <th>Fecha</th>
+          <th>Módulos</th>
+          <th>Total</th>
+          <th>Cantidad de Cajas</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+         @for(budget of budgets; track budget.id){
+        <tr>
+          <td>{{ budget.id || '-' }}</td>
+          <td>{{ budget.client }}</td>
+          <td>{{ budget.date | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ budget.modules.length }}</td>
+          <td>{{ budget.total | currency: 'USD':'symbol' }}</td>
+          <td>{{ budget.boxCount }}</td>
+          <td>
+            <button class="btn btn-primary btn-sm" (click)="onviewDetails(budget)">Ver Mas</button>
+            
+          </td>
+        </tr>
+    }
+      </tbody>
+    </table>
+  </div>

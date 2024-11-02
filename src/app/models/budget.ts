@@ -2,11 +2,19 @@ export interface Budget {
   id?: string;
   client: string;
   date: Date;
+  modules: BudgetModule[];
+  total:number;
+  boxCount: number;
   /* TODO
-     Add collection to hold data about:
+    Add collection to hold data about:
         - zone
         - moduleType reference that has information about (slots, price, type)
   */
+}
+export interface BudgetModule{
+  moduleType:ModuleType;
+  zone: Zone;
+  quantity: number;
 }
 
 export enum Zone {
